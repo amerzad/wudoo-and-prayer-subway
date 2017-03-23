@@ -15,6 +15,9 @@ export default class Title extends Phaser.State {
   private mummyMiddlePosition: Phaser.Point = null;
   private trackWidth: number = 100;
   private groundSprite: Phaser.Sprite = null;
+  private leftWallSprite: Phaser.Sprite = null;
+  private rightWallSprite: Phaser.Sprite = null;
+  private currentLevel = 0;
   
   
   // This is any[] not string[] due to a limitation in TypeScript at the moment;
@@ -22,14 +25,20 @@ export default class Title extends Phaser.State {
   private sfxLaserSounds: any[] = null;
   
   public create (): void {
+    this.pickStartPosition = new Phaser.Point(this.game.world.centerX, this.game.world.centerY - 175);
+    this.mummyMiddlePosition = new Phaser.Point(this.game.world.centerX, this.game.world.centerY + 175);
+
     this.backgroundTemplateSprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, Assets.Images.ImagesBackgroundTemplate.getName());
     this.backgroundTemplateSprite.anchor.setTo(0.5);
+    this.leftWallSprite = this.game.add.sprite(this.pickStartPosition.x - 2 * this.trackWidth, this.game.world.centerY, Assets.Images.ImagesGround.getName());
+    this.leftWallSprite.anchor.setTo(0.5);
+    this.leftWallSprite.angle = 90;
+    this.rightWallSprite = this.game.add.sprite(this.pickStartPosition.x + 2 * this.trackWidth, this.game.world.centerY, Assets.Images.ImagesGround.getName());
+    this.rightWallSprite.anchor.setTo(0.5);
+    this.rightWallSprite.angle = 90;
     this.groundSprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY + 255, Assets.Images.ImagesGround.getName());
     this.groundSprite.anchor.setTo(0.5);
   
-    this.pickStartPosition = new Phaser.Point(this.game.world.centerX, this.game.world.centerY - 175);
-    this.mummyMiddlePosition = new Phaser.Point(this.game.world.centerX, this.game.world.centerY + 175);
-    
     this.mummySpritesheet = this.game.add.sprite(this.mummyMiddlePosition.x, this.mummyMiddlePosition.y, Assets.Spritesheets.SpritesheetsMetalslugMummy.getName());
     this.mummySpritesheet.animations.add('walk');
     this.mummySpritesheet.animations.play('walk', 30, true);
@@ -65,6 +74,10 @@ export default class Title extends Phaser.State {
     this.backgroundTemplateSprite.events.onInputDown.add(() => {
       this.sfxAudiosprite.play(Phaser.ArrayUtils.getRandomItem(this.sfxLaserSounds));
     });
+    this.level = this.game.add.text(this.pickStartPosition.x + 2 * this.trackWidth, this.pickStartPosition.y + 50, 'Level 0', {
+      font: '28px Arial',
+      fill: '#000000'
+    });
     this.score = this.game.add.text(this.pickStartPosition.x + 2 * this.trackWidth, this.pickStartPosition.y, '0', {
       font: '28px Arial',
       fill: '#000000'
@@ -75,11 +88,14 @@ export default class Title extends Phaser.State {
       this.createPick();
     }, this.createPickEvery);
   }
-  
+  updateLevelTextSprite(){
+    this.level.text = 'Level ' + this.currentLevel;
+  }
   private createPickTimeout;
   private destinationTrack: Tracks = null;
   private currentTrack: Tracks = Tracks.Middle;
   private score: Phaser.Text = null;
+  private level: Phaser.Text = null;
   
   private onTrackChangeTweenComplete () {
     this.currentTrack = this.destinationTrack;
@@ -150,11 +166,13 @@ export default class Title extends Phaser.State {
             this.increaseScore(50);
             if(this.increaseSpeed)
             {
+              ++this.currentLevel;
+              this.updateLevelTextSprite();
               this.createPickEvery -= 50;
-              this.mummySpeed = Math.min(Math.floor(this.createPickEvery / 3), 250);
+              this.mummySpeed = Math.min(Math.floor(this.createPickEvery / 2), 250);
             }
+            this.increaseSpeed = true;
           }
-          this.increaseSpeed = true;
           this.correctNext = this.correctNext % this.correctOrder.length;
           this.nextRandomGroup = [];
           this.drawCorrect();
