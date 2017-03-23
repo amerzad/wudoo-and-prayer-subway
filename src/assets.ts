@@ -1,14 +1,64 @@
 /* AUTO GENERATED FILE. DO NOT MODIFY. YOU WILL LOSE YOUR CHANGES ON BUILD. */
 
 export namespace Images {
+    export class ImagesArm {
+        static getName(): string { return 'arm'; };
+
+        static getPNG(): string { return require('assets/images/arm.png'); };
+    }
     export class ImagesBackgroundTemplate {
         static getName(): string { return 'background_template'; };
 
         static getPNG(): string { return require('assets/images/background_template.png'); };
     }
+    export class ImagesFace {
+        static getName(): string { return 'face'; };
+
+        static getPNG(): string { return require('assets/images/face.png'); };
+    }
+    export class ImagesFoot {
+        static getName(): string { return 'foot'; };
+
+        static getPNG(): string { return require('assets/images/foot.png'); };
+    }
+    export class ImagesGround {
+        static getName(): string { return 'ground'; };
+
+        static getPNG(): string { return require('assets/images/ground.png'); };
+    }
+    export class ImagesHands {
+        static getName(): string { return 'hands'; };
+
+        static getPNG(): string { return require('assets/images/hands.png'); };
+    }
+    export class ImagesHead {
+        static getName(): string { return 'head'; };
+
+        static getPNG(): string { return require('assets/images/head.png'); };
+    }
+    export class ImagesMouth {
+        static getName(): string { return 'mouth'; };
+
+        static getPNG(): string { return require('assets/images/mouth.png'); };
+    }
+    export class ImagesNose {
+        static getName(): string { return 'nose'; };
+
+        static getPNG(): string { return require('assets/images/nose.png'); };
+    }
 }
 
 export namespace Spritesheets {
+    export class SpritesheetsDestinationDot {
+        static getName(): string { return 'destination_dot'; };
+
+        static getPNG(): string { return require('assets/spritesheets/destination_dot.[1,1,1,0,0].png'); };
+        static getFrameWidth(): number { return 1; };
+        static getFrameHeight(): number { return 1; };
+        static getFrameMax(): number { return 1; };
+        static getMargin(): number { return 0; };
+        static getSpacing(): number { return 0; };
+    }
     export class SpritesheetsMetalslugMummy {
         static getName(): string { return 'metalslug_mummy'; };
 
